@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Orientación Vocacional — Juegos: MBTI y RIASEC</title>
+  <meta name="description" content="Prueba gamificada de orientación vocacional: personalidad (MBTI) e intereses (RIASEC)." />
+  <style>
+    :root{--bg:#0b1220;--card:#0f1724;--muted:#9aa7b8;--accent:#06b6d4;--accent2:#7c3aed;--glass:rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial; background:linear-gradient(180deg,#071023 0%, #071733 100%);color:#e6eef8}
+    .wrap{max-width:1100px;margin:20px auto;padding:20px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo .badge{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#022}
+    h1{margin:0;font-size:20px}
+    .lead{color:var(--muted);font-size:14px}
+
+    main{display:grid;grid-template-columns:1fr 380px;gap:18px;margin-top:18px}
+    @media (max-width:980px){main{grid-template-columns:1fr;}}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;box-shadow:0 8px 26px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+
+    .stepper{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+    .progress{height:10px;background:rgba(255,255,255,0.04);border-radius:10px;overflow:hidden;flex:1}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%}
+    .score{min-width:68px;text-align:right;color:var(--muted);font-size:13px}
+
+    /* Question area */
+    .question-area{min-height:160px;display:flex;flex-direction:column;gap:12px}
+    .q-title{font-weight:700}
+    .choices{display:flex;flex-wrap:wrap;gap:10px}
+    .choice{flex:1 1 48%;min-width:140px;padding:12px;border-radius:10px;background:rgba(255,255,255,0.01);cursor:pointer;border:1px solid rgba(255,255,255,0.03);transition:transform .12s ease, box-shadow .12s ease}
+    .choice:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(2,6,23,0.6)}
+
+    /* Cards for RIASEC */
+    .activity-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+    .activity{padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));cursor:pointer;border:1px solid rgba(255,255,255,0.03);text-align:center}
+    .activity.selected{outline:3px solid rgba(6,182,212,0.14);transform:scale(1.02)}
+
+    /* Results */
+    .results-list{list-style:none;padding:0;margin:0}
+    .results-list li{padding:8px 0;border-bottom:1px dashed rgba(255,255,255,0.03)}
+
+    footer{margin-top:18px;color:var(--muted);text-align:center}
+
+    .small{font-size:13px;color:var(--muted)}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#022;cursor:pointer;font-weight:700}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+    .badge-skill{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">
+        <div class="badge">OV</div>
+        <div>
+          <h1>Orientación Vocacional — Juego</h1>
+          <div class="lead">Realiza pruebas tipo MBTI y RIASEC de forma gamificada. Recibirás un top 10 de programas universitarios sugeridos.</div>
+        </div>
+      </div>
+      <div class="small">Diseñado para jóvenes pre-universitarios • Anónimo</div>
+    </header>
+
+    <main>
+      <section class="card" aria-labelledby="mainTitle">
+        <h2 id="mainTitle">Juego: Encuentra tu perfil</h2>
+        <div class="stepper" style="margin-top:8px">
+          <div style="width:220px">Modo: <span id="modeLabel" class="small">Selecciona prueba</span></div>
+          <div class="progress" aria-hidden="false"><i id="progressBar"></i></div>
+          <div class="score">Puntos: <strong id="points">0</strong></div>
+        </div>
+
+        <!-- Selector de prueba -->
+        <div id="selector" style="display:block">
+          <p class="small">Elige una prueba para comenzar:</p>
+          <div style="display:flex;gap:10px;margin-top:8px">
+            <button class="btn" id="startMBTI">Jugar MBTI (Personalidad)</button>
+            <button class="btn ghost" id="startRIASEC">Jugar RIASEC (Intereses)</button>
+          </div>
+          <p class="small" style="margin-top:10px">Consejo: haz las dos pruebas para obtener recomendaciones más precisas.</p>
+        </div>
+
+        <!-- Area de preguntas MBTI -->
+        <div id="mbtiArea" style="display:none">
+          <div class="question-area">
+            <div class="q-title" id="qText">Pregunta</div>
+            <div class="choices" id="qChoices"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:12px">
+            <button class="btn ghost" id="mbtiBack">Volver</button>
+            <div>
+              <button class="btn ghost" id="skipQ">Saltar (-1 punto)</button>
+              <button class="btn" id="nextQ">Siguiente</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Area RIASEC -->
+        <div id="riasecArea" style="display:none">
+          <h3>Juego RIASEC — Elige actividades que te atraigan</h3>
+          <p class="small">Haz clic en las actividades que más te gusten. Intenta elegir al menos 8.</p>
+          <div class="activity-grid" id="activities"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:12px">
+            <button class="btn ghost" id="riasecBack">Volver</button>
+            <button class="btn" id="riasecFinish">Terminar RIASEC</button>
+          </div>
+        </div>
+
+        <!-- Resultados preliminares -->
+        <div id="miniResults" style="display:none;margin-top:12px">
+          <h3>Progreso</h3>
+          <p class="small">Has completado: <span id="completedCount">0</span> pruebas.</p>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn" id="doMBTI">Hacer MBTI</button>
+            <button class="btn" id="doRIASEC">Hacer RIASEC</button>
+            <button class="btn" id="seeFinal">Ver resultados finales</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <h3>Resultados</h3>
+        <div id="resultBox">
+          <p class="small">Aún no hay resultados. Completa las pruebas para ver tu perfil y el top 10 de programas.</p>
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn ghost" id="resetAll">Reiniciar juego</button>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <div class="small">Este juego es orientativo. Para decisiones importantes consulta un orientador vocacional.</div>
+    </footer>
+  </div>
+
+  <script>
+    // --- Datos MBTI (preguntas simplificadas y mapeo) ---
+    const mbtiQuestions = [
+      {id:1,text:'Cuando estás en una reunión social, ¿prefieres conversar con muchas personas (A) o con unas pocas en profundidad (B)?',a:'A',b:'B',axis:'E/I'},
+      {id:2,text:'¿Sueles decidir en base a la lógica (A) o a cómo te hace sentir (B)?',a:'A',b:'B',axis:'T/F'},
+      {id:3,text:'¿Te organizas con planificación (A) o improvisas (B)?',a:'A',b:'B',axis:'J/P'},
+      {id:4,text:'¿Prefieres datos concretos (A) o ideas e implicaciones (B)?',a:'A',b:'B',axis:'S/N'},
+      {id:5,text:'¿Te recargas estando con otras personas (A) o estando a solas (B)?',a:'A',b:'B',axis:'E/I'},
+      {id:6,text:'¿Confías más en experiencia probada (A) o en nuevas posibilidades (B)?',a:'A',b:'B',axis:'S/N'},
+      {id:7,text:'¿Cuando tomas decisiones te guías por criterios objetivos (A) o por valores personales (B)?',a:'A',b:'B',axis:'T/F'},
+      {id:8,text:'¿Prefieres cerrar tareas (A) o mantener opciones abiertas (B)?',a:'A',b:'B',axis:'J/P'},
+      {id:9,text:'¿En general disfrutas estar en grupos grandes (A) o prefieres actividades individuales (B)?',a:'A',b:'B',axis:'E/I'},
+      {id:10,text:'¿Te enfocas en los hechos (A) o en las conexiones y significados (B)?',a:'A',b:'B',axis:'S/N'}
+    ];
+
+    // --- Datos RIASEC: actividades y códigos ---
+    const riasecActivities = [
+      {id:1,text:'Construir o arreglar aparatos (Ingeniería, Técnico)',code:'R'},
+      {id:2,text:'Ayudar a personas directamente (Salud, Social)',code:'S'},
+      {id:3,text:'Investigar y resolver problemas teóricos (Ciencia, Matemáticas)',code:'I'},
+      {id:4,text:'Crear obras artísticas o diseñar (Arte, Diseño)',code:'A'},
+      {id:5,text:'Dirigir equipos o empresas (Negocios, Administración)',code:'E'},
+      {id:6,text:'Organizar información y procesos (Administrativo)',code:'C'},
+      {id:7,text:'Trabajar al aire libre con plantas/animales (Agronomía, Medioambiente)',code:'R'},
+      {id:8,text:'Participar en actuaciones, medios o comunicación (Comunicación, Artes)',code:'A'},
+      {id:9,text:'Llevar cuentas o análisis financieros (Economía, Finanzas)',code:'C'},
+      {id:10,text:'Diseñar soluciones técnicas o programar (Informática)',code:'I'},
+      {id:11,text:'Realizar experimentos de laboratorio (Biología, Química)',code:'I'},
+      {id:12,text:'Trabajar en ventas o relaciones públicas (Comercial)',code:'E'},
+      {id:13,text:'Crear productos visuales o multimedia (Diseño gráfico, Multimedia)',code:'A'},
+      {id:14,text:'Implementar políticas o trabajar en instituciones públicas (Políticas, Derecho)',code:'E'},
+      {id:15,text:'Atender y servir en turismo/hospitalidad (Turismo, Servicios)',code:'S'},
+      {id:16,text:'Resolver problemas prácticos de construcción o arquitectura (Arquitectura, Ingeniería)',code:'R'},
+      {id:17,text:'Enseñar o preparar materiales para aprender (Educación)',code:'S'},
+      {id:18,text:'Analizar datos y estadística (Matemáticas, Data Science)',code:'C'}
+    ];
+
+    // Recomendaciones por MBTI (simplificadas)
+    const mbtiMap = {
+      'ISTJ':['Ingeniería Civil','Contaduría y Finanzas','Administración','Derecho','Arquitectura','Sistemas','Matemáticas','Psicología','Enfermería','Física'],
+      'ISFJ':['Enfermería','Educación','Trabajo Social','Psicología','Administración','Comunicación','Nutrición','Medicina','Derecho','Bibliotecología'],
+      'INFJ':['Psicología','Filosofía','Letras','Trabajo Social','Diseño','Educación','Derecho','Artes','Relaciones Internacionales','Psicopedagogía'],
+      'INTJ':['Ingeniería de Sistemas','Matemáticas','Física','Economía','Arquitectura','Investigación','Negocios','Derecho','Ciencias de la Computación','Ingeniería Electrónica'],
+      'ISTP':['Ingeniería Mecánica','Técnico en Electrónica','Arquitectura','Diseño Industrial','Ingeniería Civil','Ingeniería de Producción','Sistemas','Gastronomía','Técnico Industrial','Deportes'],
+      'ISFP':['Diseño Gráfico','Artes Plásticas','Medicina Veterinaria','Enfermería','Comunicación','Gastronomía','Educación Inicial','Terapia Ocupacional','Diseño de Modas','Fotografía'],
+      'INFP':['Letras','Psicología','Filosofía','Diseño','Trabajo Social','Comunicación','Historia','Artes','Pedagogía','Sociología'],
+      'INTP':['Ciencias de la Computación','Matemáticas','Física','Investigación','Filosofía','Ingeniería de Sistemas','Economía','Estadística','IA','Química'],
+      'ESTP':['Administración de Empresas','Comercio Internacional','Ingeniería Industrial','Publicidad','Deportes','Gastronomía','Turismo','Logística','Negocios','Producción Audiovisual'],
+      'ESFP':['Comunicación Social','Artes Escénicas','Turismo','Publicidad','Gastronomía','Diseño','Psicología','Educación Inicial','Relaciones Públicas','Moda'],
+      'ENFP':['Comunicación','Publicidad','Diseño','Psicología','Relaciones Internacionales','Marketing','Derecho','Educación','Emprendimiento','Periodismo'],
+      'ENTP':['Negocios','Derecho','Ingeniería Comercial','Publicidad','Emprendimiento','Ciencias Políticas','Ingeniería de Sistemas','Comunicaciones','Economía','Investigación'],
+      'ESTJ':['Administración','Contaduría','Derecho','Ingeniería Industrial','Política','Logística','Arquitectura','Recursos Humanos','Finanzas','Negocios'],
+      'ESFJ':['Psicología','Administración','Educación','Comunicación','Trabajo Social','Enfermería','Recursos Humanos','Hotelería','Marketing','Gestión Cultural'],
+      'ENFJ':['Psicología','Educación','Relaciones Internacionales','Comunicación','Derecho','Administración','Trabajo Social','RRHH','Psicopedagogía','Gestión Cultural'],
+      'ENTJ':['Administración de Empresas','Ingeniería Comercial','Derecho','Economía','Negocios','Política','Finanzas','Gestión de Proyectos','Emprendimiento','Ingeniería Industrial']
+    };
+
+    // Recomendaciones por RIASEC dominantes
+    const riasecMap = {
+      'R':['Ingeniería','Arquitectura','Tecnología','Agronomía','Logística','Construcción','Diseño Industrial','Geología','Técnicas','Medio Ambiente'],
+      'I':['Ciencias Puras','Matemáticas','Investigación','Medicina','Ingeniería de Sistemas','Bioquímica','Estadística','Data Science','Física','Química'],
+      'A':['Diseño','Belllas Artes','Comunicación Visual','Artes Escénicas','Diseño Multimedia','Moda','Música','Fotografía','Publicidad','Cine'],
+      'S':['Psicología','Enfermería','Trabajo Social','Educación','Medicina','Terapia Ocupacional','Fonoaudiología','Nutrición','Sociología','Rehabilitación'],
+      'E':['Administración','Marketing','Comercio','Relaciones Internacionales','Derecho','Negocios','Turismo','Recursos Humanos','Gerencia','Ventas'],
+      'C':['Contabilidad','Economía','Finanzas','Administración Pública','Estadística','Sistemas de Información','Auditoría','Data Science','Logística','Ingeniería Industrial']
+    };
+
+    // Estado del juego
+    let state = {
+      points:0,
+      mbtiAnswers:[], // store selected option 'A' or 'B'
+      riasecSelected:[], // ids
+      completed:{mbti:false,riasec:false}
+    };
+
+    // --- UI elementos ---
+    const startMBTI = document.getElementById('startMBTI');
+    const startRIASEC = document.getElementById('startRIASEC');
+    const selector = document.getElementById('selector');
+    const mbtiArea = document.getElementById('mbtiArea');
+    const riasecArea = document.getElementById('riasecArea');
+    const qText = document.getElementById('qText');
+    const qChoices = document.getElementById('qChoices');
+    const progressBar = document.getElementById('progressBar');
+    const pointsEl = document.getElementById('points');
+    const resultBox = document.getElementById('resultBox');
+    const miniResults = document.getElementById('miniResults');
+    const completedCount = document.getElementById('completedCount');
+    const modeLabel = document.getElementById('modeLabel');
+
+    // MBTI flow
+    let mbtiIndex = 0;
+
+    function updateProgress(percent){progressBar.style.width = percent + '%';}
+    function updatePoints(){pointsEl.textContent = state.points}
+    function showSelector(){selector.style.display='block';mbtiArea.style.display='none';riasecArea.style.display='none';miniResults.style.display='none';modeLabel.textContent='Selecciona prueba'}
+    function showMiniResults(){selector.style.display='none';miniResults.style.display='block';mbtiArea.style.display='none';riasecArea.style.display='none';modeLabel.textContent='Progreso'}
+
+    startMBTI.addEventListener('click',()=>{startMBTIGame()});
+    startRIASEC.addEventListener('click',()=>{startRIASECGame()});
+
+    // MBTI functions
+    function startMBTIGame(){
+      selector.style.display='none';
+      mbtiArea.style.display='block';
+      riasecArea.style.display='none';
+      mbtiIndex = 0; state.mbtiAnswers = [];
+      modeLabel.textContent='MBTI - Personalidad';
+      updateMBTIQuestion();
+      updateProgress(0);
+    }
+
+    function updateMBTIQuestion(){
+      const q = mbtiQuestions[mbtiIndex];
+      qText.textContent = `(${mbtiIndex+1}/${mbtiQuestions.length}) ` + q.text;
+      qChoices.innerHTML = '';
+      // Two choice buttons (A/B)
+      const btnA = document.createElement('div'); btnA.className='choice'; btnA.tabIndex=0; btnA.textContent = q.a + ' — ' + (q.text.includes('?')? '': '');
+      // Present actual options: interpret A and B better
+      btnA.textContent = q.a==='A' ? 'Opción 1' : 'Opción 1';
+      const btnB = document.createElement('div'); btnB.className='choice'; btnB.tabIndex=0; btnB.textContent = q.b==='B' ? 'Opción 2' : 'Opción 2';
+
+      // Instead show more meaningful labels
+      btnA.innerHTML = `<strong>Preferencia A</strong><div class="small">${explainOption(q,q.a)}</div>`;
+      btnB.innerHTML = `<strong>Preferencia B</strong><div class="small">${explainOption(q,q.b)}</div>`;
+
+      btnA.onclick = ()=>selectMBTI('A'); btnB.onclick = ()=>selectMBTI('B');
+      qChoices.appendChild(btnA); qChoices.appendChild(btnB);
+    }
+
+    function explainOption(q,opt){
+      // make a short phrase for A or B to guide users
+      const axis = q.axis;
+      if(axis==='E/I') return opt==='A' ? 'Me energiza socializar' : 'Prefiero momentos a solas';
+      if(axis==='T/F') return opt==='A' ? 'Me guían la lógica y el análisis' : 'Mis decisiones siguen valores y sentimientos';
+      if(axis==='J/P') return opt==='A' ? 'Me gusta planear y cerrar asuntos' : 'Prefiero flexibilidad y opciones abiertas';
+      if(axis==='S/N') return opt==='A' ? 'Prefiero hechos y experiencias' : 'Me atraen las ideas y posibilidades';
+      return '';
+    }
+
+    function selectMBTI(choice){
+      state.mbtiAnswers.push(choice);
+      state.points += 5; // reward
+      updatePoints();
+      mbtiIndex++;
+      const percent = Math.round((mbtiIndex/mbtiQuestions.length)*100);
+      updateProgress(percent);
+      if(mbtiIndex<mbtiQuestions.length){
+        updateMBTIQuestion();
+      } else {
+        finishMBTI();
+      }
+    }
+
+    document.getElementById('nextQ').addEventListener('click',()=>{
+      // treat as skip
+      state.mbtiAnswers.push('X'); state.points -=1; updatePoints(); mbtiIndex++; updateProgress(Math.round((mbtiIndex/mbtiQuestions.length)*100));
+      if(mbtiIndex<mbtiQuestions.length) updateMBTIQuestion(); else finishMBTI();
+    });
+    document.getElementById('skipQ').addEventListener('click',()=>{document.getElementById('nextQ').click()});
+    document.getElementById('mbtiBack').addEventListener('click',()=>{showSelector();});
+
+    function finishMBTI(){
+      mbtiArea.style.display='none';
+      state.completed.mbti = true;
+      state.points += 20; updatePoints();
+      showMiniResults();
+      renderResultBox();
+    }
+
+    // --- RIASEC flow ---
+    function startRIASECGame(){
+      selector.style.display='none';
+      mbtiArea.style.display='none';
+      riasecArea.style.display='block';
+      modeLabel.textContent='RIASEC - Intereses';
+      state.riasecSelected = [];
+      renderActivities();
+      updateProgress(0);
+    }
+
+    function renderActivities(){
+      const container = document.getElementById('activities'); container.innerHTML='';
+      riasecActivities.forEach(act=>{
+        const d = document.createElement('div'); d.className='activity'; d.tabIndex=0; d.dataset.id = act.id; d.innerHTML = `<strong>${act.code}</strong><div class="small">${act.text}</div>`;
+        d.onclick = ()=>{
+          toggleActivity(d,act.id);
+        };
+        container.appendChild(d);
+      });
+    }
+
+    function toggleActivity(el,id){
+      const idx = state.riasecSelected.indexOf(id);
+      if(idx===-1){ state.riasecSelected.push(id); el.classList.add('selected'); state.points +=3; }
+      else { state.riasecSelected.splice(idx,1); el.classList.remove('selected'); state.points -=2; }
+      updatePoints();
+      const percent = Math.round((state.riasecSelected.length/riasecActivities.length)*100);
+      updateProgress(percent);
+    }
+
+    document.getElementById('riasecFinish').addEventListener('click',()=>{
+      if(state.riasecSelected.length<4){
+        alert('Te sugerimos escoger al menos 4 actividades para obtener resultados más fiables.');
+        return;
+      }
+      state.completed.riasec = true; state.points += 15; updatePoints(); riasecArea.style.display='none'; showMiniResults(); renderResultBox();
+    });
+    document.getElementById('riasecBack').addEventListener('click',()=>{showSelector();});
+
+    // Mini results actions
+    document.getElementById('doMBTI').addEventListener('click',()=>startMBTIGame());
+    document.getElementById('doRIASEC').addEventListener('click',()=>startRIASECGame());
+    document.getElementById('seeFinal').addEventListener('click',()=>showFinalResults());
+
+    // Reset
+    document.getElementById('resetAll').addEventListener('click',()=>{
+      if(!confirm('Reiniciar todo el juego?')) return;
+      state = {points:0,mbtiAnswers:[],riasecSelected:[],completed:{mbti:false,riasec:false}}; updatePoints(); updateProgress(0); showSelector(); resultBox.innerHTML='<p class="small">Aún no hay resultados. Completa las pruebas para ver tu perfil y el top 10 de programas.</p>';
+    });
+
+    // Render resultados en el aside
+    function renderResultBox(){
+      const box = document.getElementById('resultBox');
+      box.innerHTML='';
+      const ul = document.createElement('div');
+      if(state.completed.mbti){
+        const mbtiType = computeMBTI();
+        const mbtiDiv = document.createElement('div'); mbtiDiv.className='small';
+        mbtiDiv.innerHTML = `<strong>MBTI:</strong> ${mbtiType} <span class="small">- ${state.mbtiAnswers.filter(x=>x!=='X').length}/${mbtiQuestions.length} respuestas</span>`;
+        box.appendChild(mbtiDiv);
+      }
+      if(state.completed.riasec){
+        const riasecScores = computeRIASECscores();
+        const top = Object.entries(riasecScores).sort((a,b)=>b[1]-a[1]).map(x=>x[0]).slice(0,3);
+        const rdiv = document.createElement('div'); rdiv.className='small'; rdiv.style.marginTop='8px'; rdiv.innerHTML = `<strong>RIASEC (top 3):</strong> ${top.join(', ')}`;
+        box.appendChild(rdiv);
+      }
+
+      const doneCount = (state.completed.mbti?1:0)+(state.completed.riasec?1:0);
+      completedCount.textContent = doneCount;
+      if(doneCount>0){
+        const more = document.createElement('div'); more.style.marginTop='12px'; more.innerHTML = '<button class="btn" id="viewFull">Ver perfil completo</button>';
+        box.appendChild(more);
+        document.getElementById('viewFull').addEventListener('click',()=>showFinalResults());
+      }
+    }
+
+    // Compute MBTI from answers (simple majority on axes)
+    function computeMBTI(){
+      const axes = { 'E':0,'I':0,'S':0,'N':0,'T':0,'F':0,'J':0,'P':0 };
+      for(let i=0;i<mbtiQuestions.length;i++){
+        const q = mbtiQuestions[i]; const ans = state.mbtiAnswers[i];
+        if(!ans || ans==='X') continue;
+        const axis = q.axis;
+        // map A/B to particular letter based on how questions were defined earlier
+        if(axis==='E/I'){
+          if(ans==='A') axes.E++; else axes.I++;
+        } else if(axis==='S/N'){
+          if(ans==='A') axes.S++; else axes.N++;
+        } else if(axis==='T/F'){
+          if(ans==='A') axes.T++; else axes.F++;
+        } else if(axis==='J/P'){
+          if(ans==='A') axes.J++; else axes.P++;
+        }
+      }
+      const type = (axes.E>=axes.I?'E':'I') + (axes.S>=axes.N?'S':'N') + (axes.T>=axes.F?'T':'F') + (axes.J>=axes.P?'J':'P');
+      return type;
+    }
+
+    // Compute RIASEC scores from selected activities
+    function computeRIASECscores(){
+      const scores = {R:0,I:0,A:0,S:0,E:0,C:0};
+      state.riasecSelected.forEach(id=>{
+        const act = riasecActivities.find(a=>a.id===id);
+        if(act) scores[act.code]++;
+      });
+      return scores;
+    }
+
+    // Combine MBTI and RIASEC to create top 10 programs
+    function buildTopPrograms(){
+      let candidates = {};
+      // MBTI suggestions
+      if(state.completed.mbti){
+        const t = computeMBTI();
+        const list = mbtiMap[t] || [];
+        list.forEach((prog,idx)=>{ candidates[prog] = (candidates[prog]||0) + (20 - idx); });
+      }
+      // RIASEC suggestions
+      if(state.completed.riasec){
+        const scores = computeRIASECscores();
+        const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+        sorted.forEach(([code,score],rank)=>{
+          const list = riasecMap[code];
+          if(!list) return;
+          list.forEach((prog,idx)=>{ candidates[prog] = (candidates[prog]||0) + (15 - rank) + (10 - idx); });
+        });
+      }
+
+      // If no input give defaults
+      if(Object.keys(candidates).length===0){
+        const defaultList = ['Administración','Ingeniería de Sistemas','Medicina','Derecho','Psicología','Diseño','Arquitectura','Economía','Diseño Gráfico','Enfermería'];
+        defaultList.forEach((p,i)=>candidates[p]=10-i);
+      }
+
+      // Convert to sorted array
+      const arr = Object.entries(candidates).sort((a,b)=>b[1]-a[1]).slice(0,10).map(x=>x[0]);
+      return arr;
+    }
+
+    // Show final modal-like results (in page)
+    function showFinalResults(){
+      const container = document.createElement('div'); container.className='card'; container.style.marginTop='18px';
+      const title = document.createElement('h2'); title.textContent='Resultados finales'; container.appendChild(title);
+
+      // MBTI
+      if(state.completed.mbti){
+        const t = computeMBTI();
+        const p = document.createElement('p'); p.innerHTML = `<strong>Tipo MBTI:</strong> ${t} <span class="small">(basado en tus respuestas)</span>`;
+        container.appendChild(p);
+        const expl = document.createElement('p'); expl.className='small'; expl.textContent = `Descripción breve: ${mbtiBrief(t)}`; container.appendChild(expl);
+      } else {
+        const p = document.createElement('p'); p.className='small'; p.textContent='No hiciste la prueba MBTI.'; container.appendChild(p);
+      }
+
+      // RIASEC
+      if(state.completed.riasec){
+        const scores = computeRIASECscores();
+        const entries = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+        const rtitle = document.createElement('p'); rtitle.innerHTML = `<strong>RIASEC — Puntajes:</strong>`; container.appendChild(rtitle);
+        const list = document.createElement('ul'); list.className='results-list';
+        entries.forEach(([code,sc])=>{ const li = document.createElement('li'); li.innerHTML = `<span class="badge-skill">${code}</span> — ${sc} selección(es)`; list.appendChild(li); });
+        container.appendChild(list);
+      } else {
+        const p = document.createElement('p'); p.className='small'; p.textContent='No hiciste la prueba RIASEC.'; container.appendChild(p);
+      }
+
+      // Top 10 programas
+      const top = buildTopPrograms();
+      const tdiv = document.createElement('div'); tdiv.style.marginTop='12px'; tdiv.innerHTML = `<h3>Top 10 programas sugeridos</h3>`;
+      const tlist = document.createElement('ol'); tlist.className='results-list'; top.forEach(p=>{ const li=document.createElement('li'); li.innerHTML=`<strong>${p}</strong>`; tlist.appendChild(li); });
+      tdiv.appendChild(tlist); container.appendChild(tdiv);
+
+      // Replace main card content with results
+      const mainCard = document.querySelector('main .card');
+      mainCard.parentNode.insertBefore(container, mainCard.nextSibling);
+      container.scrollIntoView({behavior:'smooth'});
+
+      // update aside
+      renderResultBox();
+    }
+
+    function mbtiBrief(type){
+      const briefs = {
+        'INTJ':'Analíticos, orientados a la estrategia y la investigación.',
+        'INTP':'Curiosos, lógicos y orientados a la resolución de problemas.',
+        'ENTJ':'Líderes organizados y orientados a objetivos.',
+        'ENTP':'Innovadores, adaptables y con habilidades para debatir ideas.',
+        'INFJ':'Empáticos, reflexivos y con fuerte sentido de propósito.',
+        'INFP':'Idealistas, creativos y orientados a valores personales.',
+        'ENFJ':'Comunicativos, empáticos y buenos para coordinar personas.',
+        'ENFP':'Entusiastas, creativos y con muchas ideas para explorar.',
+        'ISTJ':'Responsables, organizados y cumplidores.',
+        'ISFJ':'Cuidadosos, leales y orientados al servicio.',
+        'ESTJ':'Prácticos, organizados y orientados al liderazgo.',
+        'ESFJ':'Sociables, organizados y orientados al cuidado de otros.',
+        'ISTP':'Prácticos, con habilidades técnicas y buena solución de problemas.',
+        'ISFP':'Sensibles, artísticos y prácticos en lo cotidiano.',
+        'ESTP':'Activos, prácticos y orientados a la acción inmediata.',
+        'ESFP':'Espontáneos, sociales y orientados a experiencias.'
+      };
+      return briefs[type] || 'Perfil resumen no disponible.';
+    }
+
+    // Initialize UI
+    showSelector(); updatePoints();
+
+    // Accessibility: keyboard support
+    document.addEventListener('keyup', (e)=>{
+      if(e.key==='Escape') showSelector();
+    });
+
+    // Small demo: auto-start MBTI if user presses M
+    document.addEventListener('keydown',(e)=>{ if(e.key.toLowerCase()==='m') startMBTIGame(); if(e.key.toLowerCase()==='r') startRIASECGame(); });
+
+  </script>
+</body>
+</html>
