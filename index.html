@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Orientación Vocacional — Juegos: MBTI y RIASEC</title>
-  <meta name="description" content="Prueba gamificada de orientación vocacional: personalidad (MBTI) e intereses (RIASEC)." />
+  <title>Orientacion Vocacional â€” Juegos: MBTI y RIASEC</title>
+  <meta name="description" content="Prueba gamificada de orientacion vocacional: personalidad (MBTI) e intereses (RIASEC)." />
   <style>
     :root{--bg:#0b1220;--card:#0f1724;--muted:#9aa7b8;--accent:#06b6d4;--accent2:#7c3aed;--glass:rgba(255,255,255,0.03)}
     *{box-sizing:border-box}
@@ -57,11 +57,11 @@
       <div class="logo">
         <div class="badge">OV</div>
         <div>
-          <h1>Orientación Vocacional — Juego</h1>
-          <div class="lead">Realiza pruebas tipo MBTI y RIASEC de forma gamificada. Recibirás un top 10 de programas universitarios sugeridos.</div>
+          <h1>Orientacion Vocacional</h1>
+          <div class="lead">Realiza pruebas tipo MBTI y RIASEC de forma gamificada. Recibiras un top 10 de programas universitarios sugeridos.</div>
         </div>
       </div>
-      <div class="small">Diseñado para jóvenes pre-universitarios • Anónimo</div>
+      <div class="small">Disenado para jovenes pre-universitarios</div>
     </header>
 
     <main>
@@ -80,7 +80,7 @@
             <button class="btn" id="startMBTI">Jugar MBTI (Personalidad)</button>
             <button class="btn ghost" id="startRIASEC">Jugar RIASEC (Intereses)</button>
           </div>
-          <p class="small" style="margin-top:10px">Consejo: haz las dos pruebas para obtener recomendaciones más precisas.</p>
+          <p class="small" style="margin-top:10px">Consejo: haz las dos pruebas para obtener recomendaciones mas precisas.</p>
         </div>
 
         <!-- Area de preguntas MBTI -->
@@ -100,8 +100,8 @@
 
         <!-- Area RIASEC -->
         <div id="riasecArea" style="display:none">
-          <h3>Juego RIASEC — Elige actividades que te atraigan</h3>
-          <p class="small">Haz clic en las actividades que más te gusten. Intenta elegir al menos 8.</p>
+          <h3>Juego RIASEC: Elige actividades que te atraigan</h3>
+          <p class="small">Haz clic en las actividades que mas te gusten. Intenta elegir al menos 8.</p>
           <div class="activity-grid" id="activities"></div>
           <div style="display:flex;justify-content:space-between;margin-top:12px">
             <button class="btn ghost" id="riasecBack">Volver</button>
@@ -124,7 +124,7 @@
       <aside class="card">
         <h3>Resultados</h3>
         <div id="resultBox">
-          <p class="small">Aún no hay resultados. Completa las pruebas para ver tu perfil y el top 10 de programas.</p>
+          <p class="small">Aun no hay resultados. Completa las pruebas para ver tu perfil y el top 10 de programas.</p>
         </div>
         <div style="margin-top:12px">
           <button class="btn ghost" id="resetAll">Reiniciar juego</button>
@@ -140,68 +140,68 @@
   <script>
     // --- Datos MBTI (preguntas simplificadas y mapeo) ---
     const mbtiQuestions = [
-      {id:1,text:'Cuando estás en una reunión social, ¿prefieres conversar con muchas personas (A) o con unas pocas en profundidad (B)?',a:'A',b:'B',axis:'E/I'},
-      {id:2,text:'¿Sueles decidir en base a la lógica (A) o a cómo te hace sentir (B)?',a:'A',b:'B',axis:'T/F'},
-      {id:3,text:'¿Te organizas con planificación (A) o improvisas (B)?',a:'A',b:'B',axis:'J/P'},
-      {id:4,text:'¿Prefieres datos concretos (A) o ideas e implicaciones (B)?',a:'A',b:'B',axis:'S/N'},
-      {id:5,text:'¿Te recargas estando con otras personas (A) o estando a solas (B)?',a:'A',b:'B',axis:'E/I'},
-      {id:6,text:'¿Confías más en experiencia probada (A) o en nuevas posibilidades (B)?',a:'A',b:'B',axis:'S/N'},
-      {id:7,text:'¿Cuando tomas decisiones te guías por criterios objetivos (A) o por valores personales (B)?',a:'A',b:'B',axis:'T/F'},
-      {id:8,text:'¿Prefieres cerrar tareas (A) o mantener opciones abiertas (B)?',a:'A',b:'B',axis:'J/P'},
-      {id:9,text:'¿En general disfrutas estar en grupos grandes (A) o prefieres actividades individuales (B)?',a:'A',b:'B',axis:'E/I'},
-      {id:10,text:'¿Te enfocas en los hechos (A) o en las conexiones y significados (B)?',a:'A',b:'B',axis:'S/N'}
+      {id:1,text:'Cuando estas en una reunion social, prefieres conversar con muchas personas (A) o con unas pocas en profundidad (B)?',a:'A',b:'B',axis:'E/I'},
+      {id:2,text:'Sueles decidir en base a la logica (A) o en base a los sentimientos (B)?',a:'A',b:'B',axis:'T/F'},
+      {id:3,text:'Te organizas con planificacion (A) o improvisas (B)?',a:'A',b:'B',axis:'J/P'},
+      {id:4,text:'Prefieres datos concretos (A) o ideas e implicaciones (B)?',a:'A',b:'B',axis:'S/N'},
+      {id:5,text:'Te recargas estando con otras personas (A) o estando a solas (B)?',a:'A',b:'B',axis:'E/I'},
+      {id:6,text:'Confias mas en experiencia probada (A) o en nuevas posibilidades (B)?',a:'A',b:'B',axis:'S/N'},
+      {id:7,text:'Cuando tomas decisiones te guias por criterios objetivos (A) o por valores personales (B)?',a:'A',b:'B',axis:'T/F'},
+      {id:8,text:'Prefieres cerrar tareas (A) o mantener opciones abiertas (B)?',a:'A',b:'B',axis:'J/P'},
+      {id:9,text:'En general disfrutas estar en grupos grandes (A) o prefieres actividades individuales (B)?',a:'A',b:'B',axis:'E/I'},
+      {id:10,text:'Te enfocas en los hechos (A) o en las conexiones y significados (B)?',a:'A',b:'B',axis:'S/N'}
     ];
 
-    // --- Datos RIASEC: actividades y códigos ---
+    // --- Datos RIASEC: actividades y codigos ---
     const riasecActivities = [
-      {id:1,text:'Construir o arreglar aparatos (Ingeniería, Técnico)',code:'R'},
-      {id:2,text:'Ayudar a personas directamente (Salud, Social)',code:'S'},
-      {id:3,text:'Investigar y resolver problemas teóricos (Ciencia, Matemáticas)',code:'I'},
-      {id:4,text:'Crear obras artísticas o diseñar (Arte, Diseño)',code:'A'},
-      {id:5,text:'Dirigir equipos o empresas (Negocios, Administración)',code:'E'},
-      {id:6,text:'Organizar información y procesos (Administrativo)',code:'C'},
-      {id:7,text:'Trabajar al aire libre con plantas/animales (Agronomía, Medioambiente)',code:'R'},
-      {id:8,text:'Participar en actuaciones, medios o comunicación (Comunicación, Artes)',code:'A'},
-      {id:9,text:'Llevar cuentas o análisis financieros (Economía, Finanzas)',code:'C'},
-      {id:10,text:'Diseñar soluciones técnicas o programar (Informática)',code:'I'},
-      {id:11,text:'Realizar experimentos de laboratorio (Biología, Química)',code:'I'},
-      {id:12,text:'Trabajar en ventas o relaciones públicas (Comercial)',code:'E'},
-      {id:13,text:'Crear productos visuales o multimedia (Diseño gráfico, Multimedia)',code:'A'},
-      {id:14,text:'Implementar políticas o trabajar en instituciones públicas (Políticas, Derecho)',code:'E'},
+      {id:1,text:'Construir o arreglar aparatos',code:'R'},
+      {id:2,text:'Ayudar a personas',code:'S'},
+      {id:3,text:'Investigar y resolver problemas teoricos',code:'I'},
+      {id:4,text:'Crear obras artisticas o disenar',code:'A'},
+      {id:5,text:'Dirigir equipos o empresas (Negocios, Administracion)',code:'E'},
+      {id:6,text:'Organizar informacion y procesos (Administrativo)',code:'C'},
+      {id:7,text:'Trabajar al aire libre con plantas/animales (Agronomia, Medioambiente)',code:'R'},
+      {id:8,text:'Participar en actuaciones, medios o comunicacion (Comunicacion, Artes)',code:'A'},
+      {id:9,text:'Llevar cuentas o analisis financieros (Economia, Finanzas)',code:'C'},
+      {id:10,text:'Disenar soluciones tecnicas o programar (Informatica)',code:'I'},
+      {id:11,text:'Realizar experimentos de laboratorio (Biologia, Quimica)',code:'I'},
+      {id:12,text:'Trabajar en ventas o relaciones publicas (Comercial)',code:'E'},
+      {id:13,text:'Crear productos visuales o multimedia (Diseno grafico, Multimedia)',code:'A'},
+      {id:14,text:'Implementar politicas o trabajar en instituciones publicas (Politicas, Derecho)',code:'E'},
       {id:15,text:'Atender y servir en turismo/hospitalidad (Turismo, Servicios)',code:'S'},
-      {id:16,text:'Resolver problemas prácticos de construcción o arquitectura (Arquitectura, Ingeniería)',code:'R'},
-      {id:17,text:'Enseñar o preparar materiales para aprender (Educación)',code:'S'},
-      {id:18,text:'Analizar datos y estadística (Matemáticas, Data Science)',code:'C'}
+      {id:16,text:'Resolver problemas practicos de construccion o arquitectura (Arquitectura, Ingenieria)',code:'R'},
+      {id:17,text:'Ensenar o preparar materiales para aprender (Educacion)',code:'S'},
+      {id:18,text:'Analizar datos y estadistica (Matematicas, Data Science)',code:'C'}
     ];
 
     // Recomendaciones por MBTI (simplificadas)
     const mbtiMap = {
-      'ISTJ':['Ingeniería Civil','Contaduría y Finanzas','Administración','Derecho','Arquitectura','Sistemas','Matemáticas','Psicología','Enfermería','Física'],
-      'ISFJ':['Enfermería','Educación','Trabajo Social','Psicología','Administración','Comunicación','Nutrición','Medicina','Derecho','Bibliotecología'],
-      'INFJ':['Psicología','Filosofía','Letras','Trabajo Social','Diseño','Educación','Derecho','Artes','Relaciones Internacionales','Psicopedagogía'],
-      'INTJ':['Ingeniería de Sistemas','Matemáticas','Física','Economía','Arquitectura','Investigación','Negocios','Derecho','Ciencias de la Computación','Ingeniería Electrónica'],
-      'ISTP':['Ingeniería Mecánica','Técnico en Electrónica','Arquitectura','Diseño Industrial','Ingeniería Civil','Ingeniería de Producción','Sistemas','Gastronomía','Técnico Industrial','Deportes'],
-      'ISFP':['Diseño Gráfico','Artes Plásticas','Medicina Veterinaria','Enfermería','Comunicación','Gastronomía','Educación Inicial','Terapia Ocupacional','Diseño de Modas','Fotografía'],
-      'INFP':['Letras','Psicología','Filosofía','Diseño','Trabajo Social','Comunicación','Historia','Artes','Pedagogía','Sociología'],
-      'INTP':['Ciencias de la Computación','Matemáticas','Física','Investigación','Filosofía','Ingeniería de Sistemas','Economía','Estadística','IA','Química'],
-      'ESTP':['Administración de Empresas','Comercio Internacional','Ingeniería Industrial','Publicidad','Deportes','Gastronomía','Turismo','Logística','Negocios','Producción Audiovisual'],
-      'ESFP':['Comunicación Social','Artes Escénicas','Turismo','Publicidad','Gastronomía','Diseño','Psicología','Educación Inicial','Relaciones Públicas','Moda'],
-      'ENFP':['Comunicación','Publicidad','Diseño','Psicología','Relaciones Internacionales','Marketing','Derecho','Educación','Emprendimiento','Periodismo'],
-      'ENTP':['Negocios','Derecho','Ingeniería Comercial','Publicidad','Emprendimiento','Ciencias Políticas','Ingeniería de Sistemas','Comunicaciones','Economía','Investigación'],
-      'ESTJ':['Administración','Contaduría','Derecho','Ingeniería Industrial','Política','Logística','Arquitectura','Recursos Humanos','Finanzas','Negocios'],
-      'ESFJ':['Psicología','Administración','Educación','Comunicación','Trabajo Social','Enfermería','Recursos Humanos','Hotelería','Marketing','Gestión Cultural'],
-      'ENFJ':['Psicología','Educación','Relaciones Internacionales','Comunicación','Derecho','Administración','Trabajo Social','RRHH','Psicopedagogía','Gestión Cultural'],
-      'ENTJ':['Administración de Empresas','Ingeniería Comercial','Derecho','Economía','Negocios','Política','Finanzas','Gestión de Proyectos','Emprendimiento','Ingeniería Industrial']
+      'ISTJ':['Ingenieria Civil','Contaduria y Finanzas','Administracion','Derecho','Arquitectura','Sistemas','Matematicas','Psicologia','Enfermeria','Fisica'],
+      'ISFJ':['Enfermeria','Educacion','Trabajo Social','Psicologia','Administracion','Comunicacion','Nutricion','Medicina','Derecho','Bibliotecologia'],
+      'INFJ':['Psicologia','Filosofia','Letras','Trabajo Social','Diseno','Educacion','Derecho','Artes','Relaciones Internacionales','Psicopedagogia'],
+      'INTJ':['Ingenieria de Sistemas','Matematicas','Fisica','Economia','Arquitectura','Investigacion','Negocios','Derecho','Ciencias de la Computacion','Ingenieria Electronica'],
+      'ISTP':['Ingenieria Mecanica','Tecnico en Electronica','Arquitectura','Diseno Industrial','Ingenieria Civil','Ingenieria de Produccion','Sistemas','Gastronomia','Tecnico Industrial','Deportes'],
+      'ISFP':['Diseno Grafico','Artes Plasticas','Medicina Veterinaria','Enfermeria','Comunicacion','Gastronomia','Educacion Inicial','Terapia Ocupacional','Diseno de Modas','Fotografia'],
+      'INFP':['Letras','Psicologia','Filosofia','Diseno','Trabajo Social','Comunicacion','Historia','Artes','Pedagogia','Sociologia'],
+      'INTP':['Ciencias de la Computacion','Matematicas','Fisica','Investigacion','Filosofia','Ingenieria de Sistemas','Economia','Estadistica','IA','Quimica'],
+      'ESTP':['Administracion de Empresas','Comercio Internacional','Ingenieria Industrial','Publicidad','Deportes','Gastronomia','Turismo','Logistica','Negocios','Produccion Audiovisual'],
+      'ESFP':['Comunicacion Social','Artes Escenicas','Turismo','Publicidad','Gastronomia','Diseno','Psicologia','Educacion Inicial','Relaciones Publicas','Moda'],
+      'ENFP':['Comunicacion','Publicidad','Diseno','Psicologia','Relaciones Internacionales','Marketing','Derecho','Educacion','Emprendimiento','Periodismo'],
+      'ENTP':['Negocios','Derecho','Ingenieria Comercial','Publicidad','Emprendimiento','Ciencias Politicas','Ingenieria de Sistemas','Comunicaciones','Economia','Investigacion'],
+      'ESTJ':['Administracion','Contaduria','Derecho','Ingenieria Industrial','Politica','Logistica','Arquitectura','Recursos Humanos','Finanzas','Negocios'],
+      'ESFJ':['Psicologia','Administracion','Educacion','Comunicacion','Trabajo Social','Enfermeria','Recursos Humanos','Hoteleria','Marketing','Gestion Cultural'],
+      'ENFJ':['Psicologia','Educacion','Relaciones Internacionales','Comunicacion','Derecho','Administracion','Trabajo Social','RRHH','Psicopedagogia','Gestion Cultural'],
+      'ENTJ':['Administracion de Empresas','Ingenieria Comercial','Derecho','Economia','Negocios','Politica','Finanzas','Gestion de Proyectos','Emprendimiento','Ingenieria Industrial']
     };
 
     // Recomendaciones por RIASEC dominantes
     const riasecMap = {
-      'R':['Ingeniería','Arquitectura','Tecnología','Agronomía','Logística','Construcción','Diseño Industrial','Geología','Técnicas','Medio Ambiente'],
-      'I':['Ciencias Puras','Matemáticas','Investigación','Medicina','Ingeniería de Sistemas','Bioquímica','Estadística','Data Science','Física','Química'],
-      'A':['Diseño','Belllas Artes','Comunicación Visual','Artes Escénicas','Diseño Multimedia','Moda','Música','Fotografía','Publicidad','Cine'],
-      'S':['Psicología','Enfermería','Trabajo Social','Educación','Medicina','Terapia Ocupacional','Fonoaudiología','Nutrición','Sociología','Rehabilitación'],
-      'E':['Administración','Marketing','Comercio','Relaciones Internacionales','Derecho','Negocios','Turismo','Recursos Humanos','Gerencia','Ventas'],
-      'C':['Contabilidad','Economía','Finanzas','Administración Pública','Estadística','Sistemas de Información','Auditoría','Data Science','Logística','Ingeniería Industrial']
+      'R':['Ingenieria','Arquitectura','Tecnologia','Agronomia','Logistica','Construccion','Diseno Industrial','Geologia','Tecnicas','Medio Ambiente'],
+      'I':['Ciencias Puras','Matematicas','Investigacion','Medicina','Ingenieria de Sistemas','Bioquimica','Estadistica','Data Science','Fisica','Quimica'],
+      'A':['Diseno','Belllas Artes','Comunicacion Visual','Artes Escenicas','Diseno Multimedia','Moda','Musica','Fotografia','Publicidad','Cine'],
+      'S':['Psicologia','Enfermeria','Trabajo Social','Educacion','Medicina','Terapia Ocupacional','Fonoaudiologia','Nutricion','Sociologia','Rehabilitacion'],
+      'E':['Administracion','Marketing','Comercio','Relaciones Internacionales','Derecho','Negocios','Turismo','Recursos Humanos','Gerencia','Ventas'],
+      'C':['Contabilidad','Economia','Finanzas','Administracion Publica','Estadistica','Sistemas de Informacion','Auditoria','Data Science','Logistica','Ingenieria Industrial']
     };
 
     // Estado del juego
@@ -254,14 +254,14 @@
       qText.textContent = `(${mbtiIndex+1}/${mbtiQuestions.length}) ` + q.text;
       qChoices.innerHTML = '';
       // Two choice buttons (A/B)
-      const btnA = document.createElement('div'); btnA.className='choice'; btnA.tabIndex=0; btnA.textContent = q.a + ' — ' + (q.text.includes('?')? '': '');
+      const btnA = document.createElement('div'); btnA.className='choice'; btnA.tabIndex=0; btnA.textContent = q.a + ' â€” ' + (q.text.includes('?')? '': '');
       // Present actual options: interpret A and B better
-      btnA.textContent = q.a==='A' ? 'Opción 1' : 'Opción 1';
-      const btnB = document.createElement('div'); btnB.className='choice'; btnB.tabIndex=0; btnB.textContent = q.b==='B' ? 'Opción 2' : 'Opción 2';
+      btnA.textContent = q.a==='A' ? 'Opcion 1' : 'Opcion 1';
+      const btnB = document.createElement('div'); btnB.className='choice'; btnB.tabIndex=0; btnB.textContent = q.b==='B' ? 'Opcion 2' : 'Opcion 2';
 
       // Instead show more meaningful labels
-      btnA.innerHTML = `<strong>Preferencia A</strong><div class="small">${explainOption(q,q.a)}</div>`;
-      btnB.innerHTML = `<strong>Preferencia B</strong><div class="small">${explainOption(q,q.b)}</div>`;
+      btnA.innerHTML = `<strong>A</strong><div class="small">${explainOption(q,q.a)}</div>`;
+      btnB.innerHTML = `<strong>B</strong><div class="small">${explainOption(q,q.b)}</div>`;
 
       btnA.onclick = ()=>selectMBTI('A'); btnB.onclick = ()=>selectMBTI('B');
       qChoices.appendChild(btnA); qChoices.appendChild(btnB);
@@ -270,10 +270,10 @@
     function explainOption(q,opt){
       // make a short phrase for A or B to guide users
       const axis = q.axis;
-      if(axis==='E/I') return opt==='A' ? 'Me energiza socializar' : 'Prefiero momentos a solas';
-      if(axis==='T/F') return opt==='A' ? 'Me guían la lógica y el análisis' : 'Mis decisiones siguen valores y sentimientos';
-      if(axis==='J/P') return opt==='A' ? 'Me gusta planear y cerrar asuntos' : 'Prefiero flexibilidad y opciones abiertas';
-      if(axis==='S/N') return opt==='A' ? 'Prefiero hechos y experiencias' : 'Me atraen las ideas y posibilidades';
+      if(axis==='E/I') return opt==='A' ? '' : '';
+      if(axis==='T/F') return opt==='A' ? '' : '';
+      if(axis==='J/P') return opt==='A' ? '' : '';
+      if(axis==='S/N') return opt==='A' ? '' : '';
       return '';
     }
 
@@ -321,7 +321,7 @@
     function renderActivities(){
       const container = document.getElementById('activities'); container.innerHTML='';
       riasecActivities.forEach(act=>{
-        const d = document.createElement('div'); d.className='activity'; d.tabIndex=0; d.dataset.id = act.id; d.innerHTML = `<strong>${act.code}</strong><div class="small">${act.text}</div>`;
+        const d = document.createElement('div'); d.className='activity'; d.tabIndex=0; d.dataset.id = act.id; d.innerHTML = `<div class="small">${act.text}</div>`;
         d.onclick = ()=>{
           toggleActivity(d,act.id);
         };
@@ -340,7 +340,7 @@
 
     document.getElementById('riasecFinish').addEventListener('click',()=>{
       if(state.riasecSelected.length<4){
-        alert('Te sugerimos escoger al menos 4 actividades para obtener resultados más fiables.');
+        alert('Te sugerimos escoger al menos 4 actividades para obtener resultados mas fiables.');
         return;
       }
       state.completed.riasec = true; state.points += 15; updatePoints(); riasecArea.style.display='none'; showMiniResults(); renderResultBox();
@@ -355,7 +355,7 @@
     // Reset
     document.getElementById('resetAll').addEventListener('click',()=>{
       if(!confirm('Reiniciar todo el juego?')) return;
-      state = {points:0,mbtiAnswers:[],riasecSelected:[],completed:{mbti:false,riasec:false}}; updatePoints(); updateProgress(0); showSelector(); resultBox.innerHTML='<p class="small">Aún no hay resultados. Completa las pruebas para ver tu perfil y el top 10 de programas.</p>';
+      state = {points:0,mbtiAnswers:[],riasecSelected:[],completed:{mbti:false,riasec:false}}; updatePoints(); updateProgress(0); showSelector(); resultBox.innerHTML='<p class="small">Aun no hay resultados. Completa las pruebas para ver tu perfil y el top 10 de programas.</p>';
     });
 
     // Render resultados en el aside
@@ -439,7 +439,7 @@
 
       // If no input give defaults
       if(Object.keys(candidates).length===0){
-        const defaultList = ['Administración','Ingeniería de Sistemas','Medicina','Derecho','Psicología','Diseño','Arquitectura','Economía','Diseño Gráfico','Enfermería'];
+        const defaultList = ['Administracion','Ingenieria de Sistemas','Medicina','Derecho','Psicologia','Diseno','Arquitectura','Economia','Diseno Grafico','Enfermeria'];
         defaultList.forEach((p,i)=>candidates[p]=10-i);
       }
 
@@ -456,9 +456,9 @@
       // MBTI
       if(state.completed.mbti){
         const t = computeMBTI();
-        const p = document.createElement('p'); p.innerHTML = `<strong>Tipo MBTI:</strong> ${t} <span class="small">(basado en tus respuestas)</span>`;
+        const p = document.createElement('p'); p.innerHTML = `<strong>Tipo MBTI:</strong> ${t} <span class="small"></span>`;
         container.appendChild(p);
-        const expl = document.createElement('p'); expl.className='small'; expl.textContent = `Descripción breve: ${mbtiBrief(t)}`; container.appendChild(expl);
+        const expl = document.createElement('p'); expl.className='small'; expl.textContent = `${mbtiBrief(t)}`; container.appendChild(expl);
       } else {
         const p = document.createElement('p'); p.className='small'; p.textContent='No hiciste la prueba MBTI.'; container.appendChild(p);
       }
@@ -467,9 +467,9 @@
       if(state.completed.riasec){
         const scores = computeRIASECscores();
         const entries = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
-        const rtitle = document.createElement('p'); rtitle.innerHTML = `<strong>RIASEC — Puntajes:</strong>`; container.appendChild(rtitle);
+        const rtitle = document.createElement('p'); rtitle.innerHTML = `<strong>Puntajes RIASEC (Realista, Investigador, Artistico, Social, Emprendedor y Convencional):</strong>`; container.appendChild(rtitle);
         const list = document.createElement('ul'); list.className='results-list';
-        entries.forEach(([code,sc])=>{ const li = document.createElement('li'); li.innerHTML = `<span class="badge-skill">${code}</span> — ${sc} selección(es)`; list.appendChild(li); });
+        entries.forEach(([code,sc])=>{ const li = document.createElement('li'); li.innerHTML = `<span class="badge-skill">${code}</span> ${sc} seleccion(es)`; list.appendChild(li); });
         container.appendChild(list);
       } else {
         const p = document.createElement('p'); p.className='small'; p.textContent='No hiciste la prueba RIASEC.'; container.appendChild(p);
@@ -492,22 +492,22 @@
 
     function mbtiBrief(type){
       const briefs = {
-        'INTJ':'Analíticos, orientados a la estrategia y la investigación.',
-        'INTP':'Curiosos, lógicos y orientados a la resolución de problemas.',
-        'ENTJ':'Líderes organizados y orientados a objetivos.',
+        'INTJ':'Analiticos, orientados a la estrategia y la investigacion.',
+        'INTP':'Curiosos, logicos y orientados a la resolucion de problemas.',
+        'ENTJ':'Lideres organizados y orientados a objetivos.',
         'ENTP':'Innovadores, adaptables y con habilidades para debatir ideas.',
-        'INFJ':'Empáticos, reflexivos y con fuerte sentido de propósito.',
+        'INFJ':'Empaticos, reflexivos y con fuerte sentido de proposito.',
         'INFP':'Idealistas, creativos y orientados a valores personales.',
-        'ENFJ':'Comunicativos, empáticos y buenos para coordinar personas.',
+        'ENFJ':'Comunicativos, empaticos y buenos para coordinar personas.',
         'ENFP':'Entusiastas, creativos y con muchas ideas para explorar.',
         'ISTJ':'Responsables, organizados y cumplidores.',
         'ISFJ':'Cuidadosos, leales y orientados al servicio.',
-        'ESTJ':'Prácticos, organizados y orientados al liderazgo.',
+        'ESTJ':'Practicos, organizados y orientados al liderazgo.',
         'ESFJ':'Sociables, organizados y orientados al cuidado de otros.',
-        'ISTP':'Prácticos, con habilidades técnicas y buena solución de problemas.',
-        'ISFP':'Sensibles, artísticos y prácticos en lo cotidiano.',
-        'ESTP':'Activos, prácticos y orientados a la acción inmediata.',
-        'ESFP':'Espontáneos, sociales y orientados a experiencias.'
+        'ISTP':'Practicos, con habilidades tecnicas y buena solucion de problemas.',
+        'ISFP':'Sensibles, artisticos y practicos en lo cotidiano.',
+        'ESTP':'Activos, practicos y orientados a la accion inmediata.',
+        'ESFP':'Espontaneos, sociales y orientados a experiencias.'
       };
       return briefs[type] || 'Perfil resumen no disponible.';
     }
