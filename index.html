@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Orientacion Vocacional — Juegos: MBTI y RIASEC</title>
-  <meta name="description" content="Prueba gamificada de orientacion vocacional: personalidad (MBTI) e intereses (RIASEC)." />
+  <title>Orientacion Vocacional mediante MBTI y RIASEC</title>
+  <meta name="description" content="Prueba de orientacion vocacional: personalidad (MBTI) e intereses (RIASEC)." />
   <style>
     :root{--bg:#0b1220;--card:#0f1724;--muted:#9aa7b8;--accent:#06b6d4;--accent2:#7c3aed;--glass:rgba(255,255,255,0.03)}
     *{box-sizing:border-box}
@@ -12,7 +12,7 @@
     .wrap{max-width:1100px;margin:20px auto;padding:20px}
     header{display:flex;justify-content:space-between;align-items:center;gap:12px}
     .logo{display:flex;align-items:center;gap:10px}
-    .logo .badge{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#022}
+    .logo .badge{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;;font-size:36px;color:#022}
     h1{margin:0;font-size:20px}
     .lead{color:var(--muted);font-size:14px}
 
@@ -55,20 +55,19 @@
   <div class="wrap">
     <header>
       <div class="logo">
-        <div class="badge">OV</div>
+        <div class="badge">&#129517;</div>
         <div>
           <h1>Orientacion Vocacional</h1>
-          <div class="lead">Realiza pruebas tipo MBTI y RIASEC de forma gamificada. Recibiras un top 10 de programas universitarios sugeridos.</div>
+          <div class="lead">Si est&aacute;s a punto de terminar la educaci&oacute;n media, realiza pruebas sobre tu personalidad e intereses para que recibas tu perfil y un top 10 de programas universitarios sugeridos.</div>
         </div>
       </div>
-      <div class="small">Disenado para jovenes pre-universitarios</div>
     </header>
 
     <main>
       <section class="card" aria-labelledby="mainTitle">
-        <h2 id="mainTitle">Juego: Encuentra tu perfil</h2>
+        <h2 id="mainTitle">Encuentra tu perfil</h2>
         <div class="stepper" style="margin-top:8px">
-          <div style="width:220px">Modo: <span id="modeLabel" class="small">Selecciona prueba</span></div>
+          <div style="width:220px">Avance: <span id="modeLabel" class="small">Selecciona prueba</span></div>
           <div class="progress" aria-hidden="false"><i id="progressBar"></i></div>
           <div class="score">Puntos: <strong id="points">0</strong></div>
         </div>
@@ -77,10 +76,10 @@
         <div id="selector" style="display:block">
           <p class="small">Elige una prueba para comenzar:</p>
           <div style="display:flex;gap:10px;margin-top:8px">
-            <button class="btn" id="startMBTI">Jugar MBTI (Personalidad)</button>
-            <button class="btn ghost" id="startRIASEC">Jugar RIASEC (Intereses)</button>
+            <button class="btn" id="startMBTI">MBTI (Personalidad)</button>
+            <button class="btn ghost" id="startRIASEC">RIASEC (Intereses)</button>
           </div>
-          <p class="small" style="margin-top:10px">Consejo: haz las dos pruebas para obtener recomendaciones mas precisas.</p>
+          <p class="small" style="margin-top:10px">Consejo: haz las dos pruebas para obtener recomendaciones m&aacute;s precisas.</p>
         </div>
 
         <!-- Area de preguntas MBTI -->
@@ -127,7 +126,7 @@
           <p class="small">Aun no hay resultados. Completa las pruebas para ver tu perfil y el top 10 de programas.</p>
         </div>
         <div style="margin-top:12px">
-          <button class="btn ghost" id="resetAll">Reiniciar juego</button>
+          <button class="btn ghost" id="resetAll">Reiniciar</button>
         </div>
       </aside>
     </main>
@@ -354,7 +353,7 @@
 
     // Reset
     document.getElementById('resetAll').addEventListener('click',()=>{
-      if(!confirm('Reiniciar todo el juego?')) return;
+      if(!confirm('Reiniciar?')) return;
       state = {points:0,mbtiAnswers:[],riasecSelected:[],completed:{mbti:false,riasec:false}}; updatePoints(); updateProgress(0); showSelector(); resultBox.innerHTML='<p class="small">Aun no hay resultados. Completa las pruebas para ver tu perfil y el top 10 de programas.</p>';
     });
 
@@ -466,10 +465,10 @@
       // RIASEC
       if(state.completed.riasec){
         const scores = computeRIASECscores();
-        const entries = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+        const entries = Object.entries(scores).sort((a,b)=>b[1]-a[1]).map(x=>x[0]).slice(0,3);
         const rtitle = document.createElement('p'); rtitle.innerHTML = `<strong>Puntajes RIASEC (Realista, Investigador, Artistico, Social, Emprendedor y Convencional):</strong>`; container.appendChild(rtitle);
-        const list = document.createElement('ul'); list.className='results-list';
-        entries.forEach(([code,sc])=>{ const li = document.createElement('li'); li.innerHTML = `<span class="badge-skill">${code}</span> ${sc} seleccion(es)`; list.appendChild(li); });
+		const list = document.createElement('ul'); list.className='results-list';
+        entries.forEach(([code,sc])=>{ const li = document.createElement('li'); li.innerHTML = `<span class="badge-skill">${code}</span>`; list.appendChild(li); });
         container.appendChild(list);
       } else {
         const p = document.createElement('p'); p.className='small'; p.textContent='No hiciste la prueba RIASEC.'; container.appendChild(p);
