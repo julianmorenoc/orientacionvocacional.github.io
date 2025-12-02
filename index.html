@@ -100,7 +100,7 @@
         <!-- Area RIASEC -->
         <div id="riasecArea" style="display:none">
           <h3>Juego RIASEC: Elige actividades que te atraigan</h3>
-          <p class="small">Haz clic en las actividades que mas te gusten. Intenta elegir al menos 8.</p>
+          <p class="small">Haz clic en las actividades que mas te gusten. Intenta elegir al menos 5.</p>
           <div class="activity-grid" id="activities"></div>
           <div style="display:flex;justify-content:space-between;margin-top:12px">
             <button class="btn ghost" id="riasecBack">Volver</button>
@@ -292,7 +292,7 @@
 
     document.getElementById('nextQ').addEventListener('click',()=>{
       // treat as skip
-      state.mbtiAnswers.push('X'); state.points -=1; updatePoints(); mbtiIndex++; updateProgress(Math.round((mbtiIndex/mbtiQuestions.length)*100));
+	  state.mbtiAnswers.push('X'); state.points -=1; updatePoints(); mbtiIndex++; updateProgress(Math.round((mbtiIndex/mbtiQuestions.length)*100));
       if(mbtiIndex<mbtiQuestions.length) updateMBTIQuestion(); else finishMBTI();
     });
     document.getElementById('skipQ').addEventListener('click',()=>{document.getElementById('nextQ').click()});
@@ -301,7 +301,7 @@
     function finishMBTI(){
       mbtiArea.style.display='none';
       state.completed.mbti = true;
-      state.points += 20; updatePoints();
+      state.points += 0; updatePoints();
       showMiniResults();
       renderResultBox();
     }
@@ -330,19 +330,20 @@
 
     function toggleActivity(el,id){
       const idx = state.riasecSelected.indexOf(id);
-      if(idx===-1){ state.riasecSelected.push(id); el.classList.add('selected'); state.points +=3; }
-      else { state.riasecSelected.splice(idx,1); el.classList.remove('selected'); state.points -=2; }
+      if(idx===-1){ state.riasecSelected.push(id); el.classList.add('selected'); state.points +=10; }
+      else { state.riasecSelected.splice(idx,1); el.classList.remove('selected'); state.points -=10; }
       updatePoints();
-      const percent = Math.round((state.riasecSelected.length/riasecActivities.length)*100);
+	  // const percent = Math.round((state.riasecSelected.length/riasecActivities.length)*100);
+      const percent = Math.round((state.riasecSelected.length/8)*100);
       updateProgress(percent);
     }
 
     document.getElementById('riasecFinish').addEventListener('click',()=>{
       if(state.riasecSelected.length<4){
-        alert('Te sugerimos escoger al menos 4 actividades para obtener resultados mas fiables.');
+        alert('Te sugerimos escoger al menos 5 actividades para obtener resultados mas fiables.');
         return;
       }
-      state.completed.riasec = true; state.points += 15; updatePoints(); riasecArea.style.display='none'; showMiniResults(); renderResultBox();
+      state.completed.riasec = true; state.points += 0; updatePoints(); riasecArea.style.display='none'; showMiniResults(); renderResultBox();
     });
     document.getElementById('riasecBack').addEventListener('click',()=>{showSelector();});
 
@@ -491,22 +492,22 @@
 
     function mbtiBrief(type){
       const briefs = {
-        'INTJ':'Analiticos, orientados a la estrategia y la investigacion.',
-        'INTP':'Curiosos, logicos y orientados a la resolucion de problemas.',
-        'ENTJ':'Lideres organizados y orientados a objetivos.',
-        'ENTP':'Innovadores, adaptables y con habilidades para debatir ideas.',
-        'INFJ':'Empaticos, reflexivos y con fuerte sentido de proposito.',
-        'INFP':'Idealistas, creativos y orientados a valores personales.',
-        'ENFJ':'Comunicativos, empaticos y buenos para coordinar personas.',
-        'ENFP':'Entusiastas, creativos y con muchas ideas para explorar.',
-        'ISTJ':'Responsables, organizados y cumplidores.',
-        'ISFJ':'Cuidadosos, leales y orientados al servicio.',
-        'ESTJ':'Practicos, organizados y orientados al liderazgo.',
-        'ESFJ':'Sociables, organizados y orientados al cuidado de otros.',
-        'ISTP':'Practicos, con habilidades tecnicas y buena solucion de problemas.',
-        'ISFP':'Sensibles, artisticos y practicos en lo cotidiano.',
-        'ESTP':'Activos, practicos y orientados a la accion inmediata.',
-        'ESFP':'Espontaneos, sociales y orientados a experiencias.'
+        'INTJ':'Arquitecto - Estrategas, independientes y analiticos. Les atraen los sistemas complejos y la planificacion a largo plazo. Altamente orientados a la eficiencia.',
+        'INTP':'Logico - Curiosos, analiticos y teoricos. Aman explorar ideas abstractas, modelos y conceptos. Valoran la autonomia mental y el pensamiento independiente.',
+        'ENTJ':'Comandante - Decididos, estrategicos y orientados al logro. Les gusta los retos grandes y liderar sistemas complejos. Buscan eficacia y resultados claros.',
+        'ENTP':'Innovador - Ingeniosos, argumentativos y curiosos. Disfrutan debatir, romper esquemas y proponer ideas novedosas. Se adaptan rapido a cambios y retos intelectuales.',
+        'INFJ':'Consejero - Idealistas, introspectivos y orientados al significado profundo. Buscan coherencia interna, relaciones autenticas y contribuir positivamente al mundo.',
+        'INFP':'Mediador - Idealistas, compasivos e imaginativos. Buscan proposito, valores claros y relaciones profundas. Defienden lo que considera justo con gentileza.',
+        'ENFJ':'Guia - Empaticos, comunicativos y motivadores. Identifican el potencial de otros y busca impulsarlo. Idealistas y organizados en el trabajo comunitario.',
+        'ENFP':'Inspirador - Creativos, entusiastas y orientados a posibilidades. Encuentran conexiones entre ideas y personas. Valoran la autenticidad y el crecimiento personal.',
+        'ISTJ':'Inspector - Practicos, confiables y organizados. Valoran la estructura, las reglas claras y el deber. Prefieren soluciones probadas y trabaja con constancia y precision.',
+        'ISFJ':'Defensor - Atentos, empaticos y responsables. Les gusta ayudar a otros y mantener armonia. Cuidadosos con los detalles y comprometidos con su comunidad y relaciones.',
+        'ESTJ':'Supervisor - Organizados, decididos y orientados a resultados. Les gusta el orden, la claridad y los procedimientos eficientes. Toman liderazgo naturalmente.',
+        'ESFJ':'Cuidador - Sociables, atentos y cooperativos. Priorizan la armonia, las necesidades ajenas y las tradiciones. Excelentes para coordinar y apoyar grupos.',
+        'ISTP':'Tecnico - Practicos, logicos y adaptables. Disfrutan entender como funcionan las cosas y resolver problemas concretos. Actuan con calma incluso bajo presion.',
+        'ISFP':'Artista - Sensitivos, espontaneos y orientados a la experiencia. Valoran la autenticidad y la libertad personal. Expresan su creatividad de forma sutil y original.',
+        'ESTP':'Emprendedor - Energicos, practicos y directos. Aman la accion, los desafios inmediatos y las soluciones rapidas. Aprenden haciendo y se adaptan con soltura.',
+        'ESFP':'Animador - Extrovertidos, alegres y espontaneos. Les encanta conectar con otros y disfrutar el momento. Sensibles a lo estetico y a la atmosfera del entorno.'
       };
       return briefs[type] || 'Perfil resumen no disponible.';
     }
@@ -525,4 +526,3 @@
   </script>
 </body>
 </html>
-
